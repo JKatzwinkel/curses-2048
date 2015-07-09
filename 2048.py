@@ -108,9 +108,9 @@ class Board:
                     bit = gliph[dy * 3 + (dx - 1)]  # minus the margin
                 if bit == 1:
                     pattr = self.attribs[self.DARK_FOREGROUND]
-                    self.screen.addstr(y + dy, x + dx, ' ', pattr)
+                    self.screen.addstr(int(y + dy), int(x + dx), ' ', pattr)
                 else:
-                    self.screen.addstr(y + dy, x + dx, ' ', attr)
+                    self.screen.addstr(int(y + dy), int(x + dx), ' ', attr)
 
     def draw_tile(self, x, y, value):
         ''' Draw a whole tile by drawing it's four (padded with ' 's)
@@ -194,7 +194,8 @@ class Board:
                 score += value
                 px = (x * (self.tile_width + 1)) + 1
                 py = (y * (self.tile_height + 1)) + 1
-                self.draw_tile(px, py, value)
+                self.draw_tile(int(px), int(py), value)
+        self.score = score
         self.screen.addstr(4, 73, str(score).center(6))
 
     def check_win(self, some_movement):
@@ -348,9 +349,9 @@ class Board:
         lines = text.split('\n')
         maxlength = max([len(x) for x in lines])
         frame = '+' + ('-' * (maxlength + 2)) + '+'
-        sx = 40 - ((maxlength + 4) / 2)
-        sy = 12 - (len(lines) / 2)
-        self.screen.addstr(sy, sx, frame)
+        sx = int(40 - ((maxlength + 4) / 2))
+        sy = int(12 - (len(lines) / 2))
+        self.screen.addstr(int(sy), int(sx), frame)
         for line in lines:
             sy += 1
             s = '| ' + line.ljust(maxlength) + ' |'
