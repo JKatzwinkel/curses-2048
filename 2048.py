@@ -21,7 +21,7 @@
 """
 import curses
 import random
-
+from os.path import expanduser
 
 class ExitException(Exception):
     pass
@@ -472,6 +472,8 @@ def curses_main(stdscr, replay=False):
             return
         s = board.check_win(some_movement)
         if len(s) != 0:
+            with open(expanduser('~')+'/.2048', 'a') as f:
+                f.write('{}\n'.format(board.score))
             break
     # Redraw board (in case of a win show the 2048)
     board.draw()
