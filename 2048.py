@@ -22,6 +22,7 @@
 import curses
 import random
 from os.path import expanduser
+import datetime
 
 class ExitException(Exception):
     pass
@@ -32,7 +33,6 @@ class Board:
     LIGHT_FOREGROUND = 13
     FRAME = 14
     BACKGROUND = 15
-    
     MIN_X = 80
     MIN_Y = 24
     MIN_ERROR = 'Terminal must be at least %dx%d to play!' % (MIN_X, MIN_Y)
@@ -53,6 +53,7 @@ class Board:
     def __init__(self, screen):
         self.screen = screen
         self.score = 0
+        self.moves = 0
         self.board = self._blank_board()
         self.calculate_tile_dimensions()
 
@@ -95,6 +96,8 @@ class Board:
         self.screen.addstr(2, 74, '====  ')
         self.screen.addstr(3, 74, 'SCORE:')
         self.screen.addstr(4, 74, '      ')
+        self.screen.addstr(5, 74, 'MOVES:')
+        self.screen.addstr(6, 74, '      ')
 
     def draw_number(self, x, y, char, attr):
         ''' Draw a number from x,y to the right (4) and down (5)
@@ -197,6 +200,8 @@ class Board:
                 self.draw_tile(int(px), int(py), value)
         self.score = score
         self.screen.addstr(4, 73, str(score).center(6))
+        self.screen.addstr(6, 73, str(self.moves).center(6))
+
 
     def check_win(self, some_movement):
         ''' Check for winning/loosing condition, returning a string to
@@ -465,6 +470,7 @@ def curses_main(stdscr, replay=False):
         board.draw()
         try:
             some_movement = keys[stdscr.getch()](board)
+            board.moves += 1
         except KeyError:
             some_movement = False   # Wrong key, do not add anything in check_
             pass
@@ -473,7 +479,8 @@ def curses_main(stdscr, replay=False):
         s = board.check_win(some_movement)
         if len(s) != 0:
             with open(expanduser('~')+'/.2048', 'a') as f:
-                f.write('{}\n'.format(board.score))
+                f.write('{}, {}, {}\n'.format(str(datetime.date.today()),
+                                              board.score, board.moves))
             break
     # Redraw board (in case of a win show the 2048)
     board.draw()
