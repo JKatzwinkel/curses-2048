@@ -478,12 +478,12 @@ def curses_main(stdscr, replay=False):
             return
         s = board.check_win(some_movement)
         if len(s) != 0:
+            # Redraw board (in case of a win show the 2048)
+            board.draw()
             with open(expanduser('~')+'/.2048', 'a') as f:
                 f.write('{}, {}, {}\n'.format(str(datetime.date.today()),
                                               board.score, board.moves))
             break
-    # Redraw board (in case of a win show the 2048)
-    board.draw()
     # Draw Highscore
     scores = [sc.strip().split(',') for sc in open(expanduser('~')+'/.2048')]
     s += '\n\nTOP TEN:\n========\n'
