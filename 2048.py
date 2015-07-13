@@ -489,7 +489,7 @@ def curses_main(stdscr, replay=False):
     s += '\n\nTOP TEN:\n========\n'
     s += '\n'.join(['{}, {}'.format(*(sc[1], sc[0]))
                     for sc in sorted(scores,
-                                     key=lambda sc: sc[1],
+                                     key=lambda sc: int(sc[1]),
                                      reverse=True)[:10]]) + '\n\n'
     # Draw endgame string
     s += '\n Press q to exit, or n to start a new game'
