@@ -212,7 +212,7 @@ class Board:
         # check for win
         for y in range(4):
             for x in range(4):
-                if self.board[y][x] == 2048:
+                if self.board[y][x] == 2**13:
                     return 'You won!'
         # check for loose (no 0es) while filling an array of blanks
         # to put a 2 in the next turn
